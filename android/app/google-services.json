@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "250943322957",
+    "project_id": "gestionstocks-7ffb4",
+    "storage_bucket": "gestionstocks-7ffb4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250943322957:android:8c778ea6c4da29cf75d504",
+        "android_client_info": {
+          "package_name": "com.example.gestion_stock_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNaAEcyS04tu1i_zAtDHvrsb0fworRaQM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
