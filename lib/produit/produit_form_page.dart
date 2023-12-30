@@ -4,8 +4,10 @@ import 'package:gestion_stock_flutter/produit/produit_page.dart';
 import 'package:gestion_stock_flutter/service/produit_service.dart';
 import 'package:gestion_stock_flutter/widget/default_field_widget.dart';
 
+// ignore: must_be_immutable
 class ProduitForm extends StatelessWidget {
   final TextEditingController stockEditingController = TextEditingController();
+  int stock = 0;
 
   final Produit produit;
   ProduitForm({super.key, required this.produit});
@@ -80,8 +82,7 @@ class ProduitForm extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border.all(width: 1),
           borderRadius: BorderRadius.circular(20)),
-      child: TextField(
-        controller: stockEditingController,
+      child: const TextField(
         keyboardType: TextInputType.number,
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
         decoration: const InputDecoration(

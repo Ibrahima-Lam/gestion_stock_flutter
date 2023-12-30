@@ -54,13 +54,26 @@ class Delegate extends SearchDelegate {
         final Produit suggestion = suggestions.toList()[index];
         final String elementTitle = suggestion.nom;
         return ListTile(
-            leading: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                  image:
-                      DecorationImage(image: NetworkImage(suggestion.image))),
-            ),
+            leading: suggestion.image.length == 0
+                ? Container(
+                    width: 40,
+                    height: 40,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.grey,
+                      child: Text(
+                        suggestion.nom.toUpperCase().substring(0, 2),
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  )
+                : Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(suggestion.image))),
+                  ),
             title: RichText(
               text: TextSpan(
                   text: elementTitle.substring(0, query.length),
