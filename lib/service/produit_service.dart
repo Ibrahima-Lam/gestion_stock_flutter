@@ -4,13 +4,13 @@ import 'package:gestion_stock_flutter/produit/produit.dart';
 class ProduitService {
   Future<void> sendProduitTofirebase() async {
     try {
-      await FirebaseFirestore.instance.collection('produit').doc('meub1').set({
-        'nom': 'Feuteuil',
+      await FirebaseFirestore.instance.collection('produit').doc('nour1').set({
+        'nom': 'Riz',
         'prix': 2000,
         'stock': 10,
-        'categorie': 'meuble',
+        'categorie': 'nourriture',
         'image': '',
-        'description': '',
+        'description': 'Sac de riz 50kg',
       });
     } catch (e) {}
   }

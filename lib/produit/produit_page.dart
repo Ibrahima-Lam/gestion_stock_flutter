@@ -85,7 +85,7 @@ class _ProduitPageState extends State<ProduitPage> {
                   )
               ]),
         drawer: const DrawerWidget(),
-        /* floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
@@ -93,7 +93,7 @@ class _ProduitPageState extends State<ProduitPage> {
               await _service.sendProduitTofirebase();
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => ProduitPage()));
-            }), */
+            }),
       ),
     ));
   }
