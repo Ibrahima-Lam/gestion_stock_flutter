@@ -13,7 +13,7 @@ class VentePage extends StatefulWidget {
 
 class _VentePageState extends State<VentePage> {
   VenteService _venteService = VenteService();
-  List<Vente> Ventes = [];
+  List<VenteProduitClient> Ventes = [];
   bool isLoading = false;
   final String appBarTitle = 'Listes des ventes';
 
@@ -96,7 +96,7 @@ class _VentePageState extends State<VentePage> {
 }
 
 class ModalContainer extends StatelessWidget {
-  final Vente vente;
+  final VenteProduitClient vente;
   const ModalContainer({super.key, required this.vente});
 
   @override

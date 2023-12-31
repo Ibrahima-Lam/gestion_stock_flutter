@@ -17,14 +17,14 @@ class VenteService {
     } catch (e) {}
   }
 
-  Vente venteJoin(Map<String, dynamic> vente, List<Client> clients,
+  VenteProduitClient venteJoin(Map<String, dynamic> vente, List<Client> clients,
       List<Produit> produits) {
     final Client client =
         clients.where((c) => vente['idClient'] == c.idClient).toList()[0];
     final Produit produit =
         produits.where((c) => vente['idProduit'] == c.idProduit).toList()[0];
 
-    return Vente(
+    return VenteProduitClient(
       adresse: client.adresse,
       idClient: client.idClient,
       nomClient: client.nom,
@@ -42,8 +42,8 @@ class VenteService {
     );
   }
 
-  Future<List<Vente>> getVentesFromFirebase() async {
-    List<Vente> Ventes = [];
+  Future<List<VenteProduitClient>> getVentesFromFirebase() async {
+    List<VenteProduitClient> Ventes = [];
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await FirebaseFirestore.instance.collection('vente').get();
@@ -54,7 +54,7 @@ class VenteService {
         Map<String, dynamic> data = documentSnapshot.data();
         final String id = documentSnapshot.id;
         data['id'] = id;
-        Vente vente = venteJoin(data, clients, produits);
+        VenteProduitClient vente = venteJoin(data, clients, produits);
         Ventes.add(vente);
         print('-' * 50);
         print(vente);

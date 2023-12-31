@@ -3,13 +3,20 @@ import 'package:gestion_stock_flutter/produit/produit.dart';
 import 'package:gestion_stock_flutter/produit/produit_form_page.dart';
 import 'package:gestion_stock_flutter/vente/vente_form_page.dart';
 
-class SingleProduit extends StatelessWidget {
-  final TextEditingController stockEditingController = TextEditingController();
+class SingleProduit extends StatefulWidget {
   final Produit produit;
 
   SingleProduit({super.key, required this.produit});
 
   @override
+  State<SingleProduit> createState() => _SingleProduitState();
+}
+
+class _SingleProduitState extends State<SingleProduit> {
+  final TextEditingController stockEditingController = TextEditingController();
+
+  @override
+  Future<void> neWPage() async {}
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -31,14 +38,14 @@ class SingleProduit extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              produit.image.length == 0
+              widget.produit.image.length == 0
                   ? Container(
                       width: MediaQuery.of(context).size.width,
                       height: 150,
                       child: CircleAvatar(
                         backgroundColor: Colors.grey,
                         child: Text(
-                          produit.nom.toUpperCase().substring(0, 2),
+                          widget.produit.nom.toUpperCase().substring(0, 2),
                           style: TextStyle(
                               fontSize: 60, fontWeight: FontWeight.bold),
                         ),
@@ -48,24 +55,26 @@ class SingleProduit extends StatelessWidget {
                       height: 200,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(produit.image))),
+                              image: NetworkImage(widget.produit.image))),
                     ),
               const SizedBox(
                 height: 20,
               ),
-              ItemRow(title: 'Nom du Produit :', content: produit.nom),
+              ItemRow(title: 'Nom du Produit :', content: widget.produit.nom),
               const SizedBox(
                 height: 20,
               ),
-              ItemRow(title: 'Description :', content: produit.description),
+              ItemRow(
+                  title: 'Description :', content: widget.produit.description),
               const SizedBox(
                 height: 20,
               ),
-              ItemRow(title: 'Prix :', content: produit.prix.toString()),
+              ItemRow(title: 'Prix :', content: widget.produit.prix.toString()),
               const SizedBox(
                 height: 20,
               ),
-              ItemRow(title: 'Stock :', content: produit.stock.toString()),
+              ItemRow(
+                  title: 'Stock :', content: widget.produit.stock.toString()),
               const SizedBox(
                 height: 20,
               ),
@@ -78,13 +87,15 @@ class SingleProduit extends StatelessWidget {
                 children: [
                   ActionButton(
                     title: ' Stocker',
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      dynamic a = await Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProduitForm(
-                                    produit: produit,
+                                    produit: widget.produit,
                                   )));
+                      print('*' * 50);
+                      print(a);
                     },
                   ),
                   ActionButton(
@@ -94,7 +105,7 @@ class SingleProduit extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => VenteForm(
-                                    produit: produit,
+                                    produit: widget.produit,
                                   )));
                     },
                   )

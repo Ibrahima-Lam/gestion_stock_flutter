@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Field extends StatelessWidget {
-  final TextEditingController controller;
+  TextEditingController? controller;
+  Function? onChanged;
   final String hintText;
 
-  Field({super.key, required this.controller, required this.hintText});
+  Field({super.key, this.controller, this.onChanged, required this.hintText});
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +15,15 @@ class Field extends StatelessWidget {
           borderRadius: BorderRadius.circular(20)),
       child: TextField(
         controller: controller,
-        // keyboardType: TextInputType.number,
+        keyboardType: TextInputType.number,
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(8),
+            contentPadding: EdgeInsets.symmetric(horizontal: 8),
             hintText: hintText,
             border: InputBorder.none),
+        onChanged: (v) {
+          onChanged!(v);
+        },
       ),
     );
   }

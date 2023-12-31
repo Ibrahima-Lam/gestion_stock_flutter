@@ -1,18 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:gestion_stock_flutter/client/client.dart';
 import 'package:gestion_stock_flutter/produit/produit.dart';
-import 'package:gestion_stock_flutter/produit/produit_page.dart';
+import 'package:gestion_stock_flutter/service/client_service.dart';
+import 'package:gestion_stock_flutter/service/vente_service.dart';
+import 'package:gestion_stock_flutter/vente/vente.dart';
 import 'package:gestion_stock_flutter/widget/default_field_widget.dart';
 
-class VenteForm extends StatelessWidget {
+class VenteForm extends StatefulWidget {
+  final Produit produit;
+
+  VenteForm({super.key, required this.produit});
+
+  @override
+  State<VenteForm> createState() => _VenteFormState();
+}
+
+class _VenteFormState extends State<VenteForm> {
   final TextEditingController produitEditingController =
       TextEditingController();
-  final TextEditingController clientEditingController = TextEditingController();
-  final TextEditingController quantiteEditingController =
-      TextEditingController();
-  final TextEditingController dateEditingController = TextEditingController();
 
-  final Produit produit;
-  VenteForm({super.key, required this.produit});
+  List<Client> clients = [];
+  String? clientValue;
+  int quantiteValue = 0;
+  DateTime dateValue = DateTime.now();
+  bool isLoading = false;
+  void setIsloading(bool val) {
+    setState(() {
+      isLoading = val;
+    });
+  }
+
+  Future<void> getData() async {
+    setIsloading(true);
+    clients = await ClientService().getClientsFromFirebase();
+    setIsloading(false);
+  }
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,43 +62,55 @@ class VenteForm extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: Column(children: [
-                    Center(
+                    const Center(
                       child: Text(
-                        'Ajouter un stock',
+                        'Ajouter une vente',
                         style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Field(
-                      hintText: 'produit',
-                      controller: produitEditingController,
-                    ),
                     const SizedBox(
                       height: 20,
                     ),
-                    Field(
-                      hintText: 'client',
-                      controller: clientEditingController,
-                    ),
+                    isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              const Text(
+                                'Choisir un client',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              ClientMenu(
+                                value: clientValue,
+                                clients: clients,
+                                onChanged: (val) {
+                                  setState(() {
+                                    clientValue = val;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
                     const SizedBox(
                       height: 20,
                     ),
                     Field(
                       hintText: 'quantite',
-                      controller: quantiteEditingController,
+                      onChanged: (v) {
+                        quantiteValue = int.parse(v);
+                      },
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    DatePickerDialog(
-                        onDatePickerModeChange: (e) {},
-                        firstDate: DateTime(2022),
-                        lastDate: DateTime(2030)),
+                    DateButton(),
                     const SizedBox(
                       height: 20,
                     ),
@@ -80,8 +120,21 @@ class VenteForm extends StatelessWidget {
                             foregroundColor: Colors.white,
                             elevation: 5),
                         onPressed: () async {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ProduitPage()));
+                          final String idp = widget.produit.idProduit ?? '';
+                          final Vente vente = Vente(
+                              idVente: 'V' +
+                                  DateTime.now()
+                                      .toString()
+                                      .replaceAll('-', '')
+                                      .replaceAll(' ', '')
+                                      .replaceAll(':', '')
+                                      .substring(0, 14),
+                              idClient: clientValue!,
+                              idProduit: idp,
+                              quantite: quantiteValue,
+                              date: dateValue);
+                          await VenteService().setVenteToFirebase(vente: vente);
+                          Navigator.pop(context);
                         },
                         child: const Text(
                           'Envoyer',
@@ -93,6 +146,45 @@ class VenteForm extends StatelessWidget {
               ),
             ),
           )),
+    );
+  }
+
+  Widget DateButton() {
+    return ElevatedButton(
+        onPressed: () {
+          showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2022),
+                  lastDate: DateTime(2030))
+              .then((value) {
+            dateValue = value!;
+          });
+        },
+        child: Text('Date'));
+  }
+}
+
+class ClientMenu extends StatelessWidget {
+  final List<Client> clients;
+  final String? value;
+  final Function? onChanged;
+  ClientMenu(
+      {super.key, required this.clients, required this.value, this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: DropdownButton(
+        elevation: 5,
+        items: clients
+            .map((e) => DropdownMenuItem(value: e.idClient, child: Text(e.nom)))
+            .toList(),
+        onChanged: (val) {
+          onChanged!(val);
+        },
+        value: value,
+      ),
     );
   }
 }
