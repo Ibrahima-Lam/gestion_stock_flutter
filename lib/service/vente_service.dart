@@ -24,22 +24,7 @@ class VenteService {
     final Produit produit =
         produits.where((c) => vente['idProduit'] == c.idProduit).toList()[0];
 
-    return VenteProduitClient(
-      adresse: client.adresse,
-      idClient: client.idClient,
-      nomClient: client.nom,
-      telephone: client.telephone,
-      idVente: vente['id'],
-      idProduit: vente['idProduit'],
-      quantite: vente['quantite'],
-      date: vente['date'],
-      nom: produit.nom,
-      prix: produit.prix,
-      stock: produit.stock,
-      categorie: produit.categorie,
-      image: produit.image,
-      description: produit.description,
-    );
+    return VenteProduitClient.fromJson(vente, client: client, produit: produit);
   }
 
   Future<List<VenteProduitClient>> getVentesFromFirebase() async {
@@ -53,16 +38,42 @@ class VenteService {
           in querySnapshot.docs) {
         Map<String, dynamic> data = documentSnapshot.data();
         final String id = documentSnapshot.id;
-        data['id'] = id;
-        VenteProduitClient vente = venteJoin(data, clients, produits);
-        Ventes.add(vente);
+        data['idVente'] = id;
         print('-' * 50);
-        print(vente);
+        print(data);
+        final Client client =
+            clients.where((c) => data['idClient'] == c.idClient).toList()[0];
+        final Produit produit =
+            produits.where((c) => data['idProduit'] == c.idProduit).toList()[0];
+        VenteProduitClient vente =
+            VenteProduitClient.fromJson(data, client: client, produit: produit);
+
+        Ventes.add(vente);
       }
       return Ventes;
     } catch (e) {
       return Ventes;
     }
+  }
+
+  Future<List<Vente>> getVentesFromFirebaseWhere({
+    String? idProduit,
+  }) async {
+    List<Vente> list = [];
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('vente')
+              .where('idProduit', isEqualTo: idProduit)
+              .get();
+      for (QueryDocumentSnapshot<Map<String, dynamic>> docs
+          in querySnapshot.docs) {
+        Map<String, dynamic> data = docs.data();
+        data['idVente'] = docs.id;
+        list.add(Vente.fromJson(data));
+      }
+    } catch (e) {}
+    return list;
   }
 
   Future<void> setVenteToFirebase({
@@ -72,12 +83,7 @@ class VenteService {
       await FirebaseFirestore.instance
           .collection('vente')
           .doc(vente.idVente)
-          .set({
-        'idProduit': vente.idProduit,
-        'idClient': vente.idClient,
-        'quantite': vente.quantite,
-        'date': vente.date,
-      });
+          .set(vente.toJson());
     } catch (e) {}
   }
 }

@@ -24,14 +24,8 @@ class ProduitService {
           in querySnapshot.docs) {
         Map<String, dynamic> data = documentSnapshot.data();
         final String id = documentSnapshot.id;
-        Produit produit = Produit(
-            idProduit: id,
-            nom: data['nom'],
-            prix: data['prix'],
-            stock: data['stock'],
-            categorie: data['categorie'],
-            image: data['image'],
-            description: data['description']);
+        data['idProduit'] = id;
+        Produit produit = Produit.fromJson(data);
         Produits.add(produit);
         print(data);
       }
@@ -48,14 +42,7 @@ class ProduitService {
       await FirebaseFirestore.instance
           .collection('produit')
           .doc(produit.idProduit)
-          .set({
-        'nom': produit.nom,
-        'prix': produit.prix,
-        'stock': produit.stock,
-        'categorie': produit.categorie,
-        'image': produit.image,
-        'description': produit.description,
-      });
+          .set(produit.toJson());
     } catch (e) {}
   }
 }

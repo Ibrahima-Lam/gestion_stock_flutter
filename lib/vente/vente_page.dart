@@ -12,7 +12,7 @@ class VentePage extends StatefulWidget {
 }
 
 class _VentePageState extends State<VentePage> {
-  VenteService _venteService = VenteService();
+  final VenteService _venteService = VenteService();
   List<VenteProduitClient> Ventes = [];
   bool isLoading = false;
   final String appBarTitle = 'Listes des ventes';
@@ -55,7 +55,8 @@ class _VentePageState extends State<VentePage> {
                     child: CircularProgressIndicator(),
                   )
                 : ListView(
-                    children: Ventes.map((e) => ListTile(
+                    children: Ventes.map(
+                      (e) => ListTile(
                         leading: e.image.length == 0
                             ? Container(
                                 width: 40,
@@ -77,19 +78,21 @@ class _VentePageState extends State<VentePage> {
                                     image: DecorationImage(
                                         image: NetworkImage(e.image))),
                               ),
-                        title: Text(e.description),
-                        subtitle: Text(e.nomClient),
+                        title: Text(e.nomClient),
+                        subtitle: Text(e.nom),
                         onTap: () {
                           showModalBottomSheet(
                               context: context,
                               builder: (context) {
                                 return ModalContainer(vente: e);
                               });
-                        })).toList(),
+                        },
+                      ),
+                    ).toList(),
                   ),
           ),
         )),
-        drawer: DrawerWidget(),
+        drawer: const DrawerWidget(),
       ),
     );
   }

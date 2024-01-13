@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_stock_flutter/produit/produit.dart';
 import 'package:gestion_stock_flutter/produit/produit_form_page.dart';
+import 'package:gestion_stock_flutter/service/vente_service.dart';
+import 'package:gestion_stock_flutter/vente/vente.dart';
 import 'package:gestion_stock_flutter/vente/vente_form_page.dart';
 
 class SingleProduit extends StatefulWidget {
@@ -14,9 +16,29 @@ class SingleProduit extends StatefulWidget {
 
 class _SingleProduitState extends State<SingleProduit> {
   final TextEditingController stockEditingController = TextEditingController();
+  int vente = 0;
+  bool isLoadingVente = false;
+
+  void setIsloadingVente(bool val) {
+    setState(() {
+      isLoadingVente = val;
+    });
+  }
+
+  Future<void> getVentes() async {
+    setIsloadingVente(true);
+    List<Vente> ventes = await VenteService()
+        .getVentesFromFirebaseWhere(idProduit: widget.produit.idProduit);
+    vente = ventes.length;
+    setIsloadingVente(false);
+  }
 
   @override
-  Future<void> neWPage() async {}
+  void initState() {
+    super.initState();
+    getVentes();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -78,7 +100,18 @@ class _SingleProduitState extends State<SingleProduit> {
               const SizedBox(
                 height: 20,
               ),
-              ItemRow(title: 'Vente :', content: ''),
+              Stack(
+                children: [
+                  ItemRow(title: 'Vente :', content: vente.toString()),
+                  Center(
+                    child: isLoadingVente
+                        ? CircularProgressIndicator(
+                            color: Colors.black,
+                          )
+                        : null,
+                  )
+                ],
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -88,25 +121,30 @@ class _SingleProduitState extends State<SingleProduit> {
                   ActionButton(
                     title: ' Stocker',
                     onPressed: () async {
-                      dynamic a = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProduitForm(
-                                    produit: widget.produit,
-                                  )));
-                      print('*' * 50);
+                      final bool a = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProduitForm(
+                            produit: widget.produit,
+                          ),
+                        ),
+                      );
+                      print('_' * 60);
                       print(a);
                     },
                   ),
                   ActionButton(
                     title: 'Vendre',
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => VenteForm(
-                                    produit: widget.produit,
-                                  )));
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VenteForm(
+                            produit: widget.produit,
+                          ),
+                        ),
+                      );
+                      getVentes();
                     },
                   )
                 ],

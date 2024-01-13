@@ -18,7 +18,7 @@ class VenteForm extends StatefulWidget {
 class _VenteFormState extends State<VenteForm> {
   final TextEditingController produitEditingController =
       TextEditingController();
-
+  bool updated = false;
   List<Client> clients = [];
   String? clientValue;
   int quantiteValue = 0;
@@ -50,7 +50,7 @@ class _VenteFormState extends State<VenteForm> {
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context, updated);
               },
             ),
           ),
@@ -59,6 +59,7 @@ class _VenteFormState extends State<VenteForm> {
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: Column(children: [
@@ -122,19 +123,14 @@ class _VenteFormState extends State<VenteForm> {
                         onPressed: () async {
                           final String idp = widget.produit.idProduit ?? '';
                           final Vente vente = Vente(
-                              idVente: 'V' +
-                                  DateTime.now()
-                                      .toString()
-                                      .replaceAll('-', '')
-                                      .replaceAll(' ', '')
-                                      .replaceAll(':', '')
-                                      .substring(0, 14),
+                              idVente:
+                                  'V${DateTime.now().toString().replaceAll('-', '').replaceAll(' ', '').replaceAll(':', '').substring(0, 14)}',
                               idClient: clientValue!,
                               idProduit: idp,
                               quantite: quantiteValue,
-                              date: dateValue);
+                              date: dateValue.toString());
                           await VenteService().setVenteToFirebase(vente: vente);
-                          Navigator.pop(context);
+                          Navigator.pop(context, updated);
                         },
                         child: const Text(
                           'Envoyer',

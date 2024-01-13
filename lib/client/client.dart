@@ -12,4 +12,20 @@ class Client extends Collection {
       required this.nom,
       required this.adresse,
       required this.telephone});
+
+  factory Client.fromJson(Map<String, dynamic> json) {
+    return Client(
+      idClient: json['idClient'],
+      nom: json['nom'],
+      adresse: json['adresse'],
+      telephone: json['telephone'],
+    );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'nom': nom,
+      'adresse': adresse,
+      'telephone': telephone,
+    };
+  }
 }

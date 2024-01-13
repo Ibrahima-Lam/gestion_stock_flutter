@@ -22,13 +22,8 @@ class ClientService {
           in querySnapshot.docs) {
         Map<String, dynamic> data = documentSnapshot.data();
         final String id = documentSnapshot.id;
-        Client client = Client(
-          idClient: id,
-          nom: data['nom'],
-          adresse: data['adresse'],
-          telephone: data['telephone'],
-        );
-
+        data['idClient'] = id;
+        Client client = Client.fromJson(data);
         Clients.add(client);
         print(data);
       }
@@ -45,11 +40,7 @@ class ClientService {
       await FirebaseFirestore.instance
           .collection('client')
           .doc(client.idClient)
-          .set({
-        'nom': client.nom,
-        'adresse': client.adresse,
-        'telephone': client.telephone,
-      });
+          .set(client.toJson());
     } catch (e) {}
   }
 }

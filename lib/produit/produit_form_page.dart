@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_stock_flutter/produit/produit.dart';
-import 'package:gestion_stock_flutter/produit/produit_page.dart';
 import 'package:gestion_stock_flutter/service/produit_service.dart';
-import 'package:gestion_stock_flutter/widget/default_field_widget.dart';
 
 // ignore: must_be_immutable
-class ProduitForm extends StatelessWidget {
-  final TextEditingController stockEditingController = TextEditingController();
-  int stock = 0;
-
+class ProduitForm extends StatefulWidget {
   final Produit produit;
   ProduitForm({super.key, required this.produit});
+
+  @override
+  State<ProduitForm> createState() => _ProduitFormState();
+}
+
+class _ProduitFormState extends State<ProduitForm> {
+  int stock = 0;
+  bool updated = false;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +21,9 @@ class ProduitForm extends StatelessWidget {
       home: Scaffold(
           appBar: AppBar(
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context, updated);
               },
             ),
           ),
@@ -30,9 +33,10 @@ class ProduitForm extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               child: Container(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: Column(children: [
-                    Center(
+                    const Center(
                       child: Text(
                         'Ajouter un stock',
                         style: TextStyle(
@@ -41,13 +45,10 @@ class ProduitForm extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Field(
-                      hintText: 'Quantite',
-                      controller: stockEditingController,
-                    ),
+                    fields(),
                     const SizedBox(
                       height: 20,
                     ),
@@ -57,12 +58,13 @@ class ProduitForm extends StatelessWidget {
                             foregroundColor: Colors.white,
                             elevation: 5),
                         onPressed: () async {
-                          produit.stock = produit.stock +
-                              (stockEditingController.text as int);
+                          widget.produit.stock += stock;
                           await ProduitService()
-                              .setProduitToFirebase(produit: produit);
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ProduitPage()));
+                              .setProduitToFirebase(produit: widget.produit);
+                          setState(() {
+                            updated = true;
+                          });
+                          Navigator.pop(context, updated);
                         },
                         child: const Text(
                           'Envoyer',
@@ -79,16 +81,22 @@ class ProduitForm extends StatelessWidget {
 
   Widget fields() {
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
           border: Border.all(width: 1),
           borderRadius: BorderRadius.circular(20)),
-      child: const TextField(
+      child: TextFormField(
         keyboardType: TextInputType.number,
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
         decoration: const InputDecoration(
             contentPadding: EdgeInsets.all(8),
             hintText: 'Quantité',
             border: InputBorder.none),
+        onChanged: (val) {
+          setState(() {
+            stock = int.parse(val);
+          });
+        },
       ),
     );
   }

@@ -22,6 +22,18 @@ class LoginPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             child: Column(children: [
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Login',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 100,
+              ),
               Container(
                 decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.grey),
