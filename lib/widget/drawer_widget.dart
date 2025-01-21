@@ -16,13 +16,14 @@ class DrawerWidget extends StatelessWidget {
         children: [
           DrawerHeader(
             child: ListTile(
-              leading: Icon(
+              leading: const Icon(
                 Icons.shop_2_rounded,
                 size: 35,
               ),
               title: Text(
                 titre,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               onTap: () => Navigator.pop(context),
             ),
@@ -30,36 +31,36 @@ class DrawerWidget extends StatelessWidget {
           ListTileWidget(
             texte: 'Produits',
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => ProduitPage()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const ProduitPage()));
             },
           ),
           ListTileWidget(
             texte: 'Categories',
             onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => CategoriePage()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const CategoriePage()));
             },
           ),
           ListTileWidget(
             texte: 'Ventes',
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => VentePage()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const VentePage()));
             },
           ),
           ListTileWidget(
             texte: 'Clients',
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => ClientPage()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const ClientPage()));
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           ListTile(
-            title: Text("Deconnexion"),
+            title: const Text("Deconnexion"),
             onTap: () => Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => LoginPage())),
           ),
@@ -72,7 +73,7 @@ class DrawerWidget extends StatelessWidget {
 // ignore: must_be_immutable
 class ListTileWidget extends StatelessWidget {
   final String texte;
-  Function? onTap = null;
+  Function? onTap;
 
   ListTileWidget({super.key, this.onTap, required this.texte});
 
@@ -81,7 +82,7 @@ class ListTileWidget extends StatelessWidget {
     return ListTile(
       title: Text(
         texte,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
       ),
       onTap: () {
         Navigator.pop(context);

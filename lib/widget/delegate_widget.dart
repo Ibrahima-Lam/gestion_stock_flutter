@@ -16,9 +16,9 @@ class Delegate extends SearchDelegate {
   List<Widget>? buildActions(BuildContext context) {
     return [
       query.isEmpty
-          ? Icon(Icons.mic)
+          ? const Icon(Icons.mic)
           : IconButton(
-              icon: Icon(Icons.clear),
+              icon: const Icon(Icons.clear),
               onPressed: () {
                 query = '';
                 showSuggestions(context);
@@ -31,15 +31,15 @@ class Delegate extends SearchDelegate {
   Widget? buildLeading(BuildContext context) {
     return IconButton(
         onPressed: () {
-          this.close(context, '');
+          close(context, '');
         },
-        icon: Icon(Icons.arrow_back));
+        icon: const Icon(Icons.arrow_back));
   }
 
   @override
   Widget buildResults(BuildContext context) {
     return Center(
-      child: Text(this.query),
+      child: Text(query),
     );
   }
 
@@ -54,15 +54,15 @@ class Delegate extends SearchDelegate {
         final Produit suggestion = suggestions.toList()[index];
         final String elementTitle = suggestion.nom;
         return ListTile(
-            leading: suggestion.image.length == 0
-                ? Container(
+            leading: suggestion.image.isEmpty
+                ? SizedBox(
                     width: 40,
                     height: 40,
                     child: CircleAvatar(
                       backgroundColor: Colors.grey,
                       child: Text(
                         suggestion.nom.toUpperCase().substring(0, 2),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                     ),

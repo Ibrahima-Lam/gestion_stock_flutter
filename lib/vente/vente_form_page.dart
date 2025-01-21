@@ -9,7 +9,7 @@ import 'package:gestion_stock_flutter/widget/default_field_widget.dart';
 class VenteForm extends StatefulWidget {
   final Produit produit;
 
-  VenteForm({super.key, required this.produit});
+  const VenteForm({super.key, required this.produit});
 
   @override
   State<VenteForm> createState() => _VenteFormState();
@@ -48,7 +48,7 @@ class _VenteFormState extends State<VenteForm> {
       home: Scaffold(
           appBar: AppBar(
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context, updated);
               },
@@ -61,7 +61,8 @@ class _VenteFormState extends State<VenteForm> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: Column(children: [
                     const Center(
                       child: Text(
@@ -157,7 +158,7 @@ class _VenteFormState extends State<VenteForm> {
             dateValue = value!;
           });
         },
-        child: Text('Date'));
+        child: const Text('Date'));
   }
 }
 
@@ -165,7 +166,7 @@ class ClientMenu extends StatelessWidget {
   final List<Client> clients;
   final String? value;
   final Function? onChanged;
-  ClientMenu(
+  const ClientMenu(
       {super.key, required this.clients, required this.value, this.onChanged});
 
   @override

@@ -19,7 +19,7 @@ class Field extends StatelessWidget {
         keyboardType: TextInputType.number,
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 8),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 8),
             hintText: hintText,
             border: InputBorder.none),
         onChanged: (v) {

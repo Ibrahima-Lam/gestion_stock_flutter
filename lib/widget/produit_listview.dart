@@ -21,22 +21,22 @@ class ProduitListView extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Produit> listeFiltreProduit = filtreProduit();
 
-    return (listeFiltreProduit.length == 0)
-        ? Center(
+    return (listeFiltreProduit.isEmpty)
+        ? const Center(
             child: Text('Pas produit pour cette categorie'),
           )
         : ListView(
             children: listeFiltreProduit
                 .map((elmt) => ListTile(
-                    leading: elmt.image.length == 0
-                        ? Container(
+                    leading: elmt.image.isEmpty
+                        ? SizedBox(
                             width: 40,
                             height: 40,
                             child: CircleAvatar(
                               backgroundColor: Colors.grey,
                               child: Text(
                                 elmt.nom.toUpperCase().substring(0, 2),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 22, fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -49,7 +49,7 @@ class ProduitListView extends StatelessWidget {
                                     image: NetworkImage(elmt.image))),
                           ),
                     title: Text(elmt.nom),
-                    subtitle: Text(elmt.prix.toString() + ' um'),
+                    subtitle: Text('${elmt.prix} um'),
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => SingleProduit(produit: elmt)));

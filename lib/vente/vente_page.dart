@@ -49,7 +49,7 @@ class _VentePageState extends State<VentePage> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
             child: isLoading
                 ? const Center(
                     child: CircularProgressIndicator(),
@@ -57,15 +57,15 @@ class _VentePageState extends State<VentePage> {
                 : ListView(
                     children: Ventes.map(
                       (e) => ListTile(
-                        leading: e.image.length == 0
-                            ? Container(
+                        leading: e.image.isEmpty
+                            ? SizedBox(
                                 width: 40,
                                 height: 40,
                                 child: CircleAvatar(
                                   backgroundColor: Colors.grey,
                                   child: Text(
                                     e.nom.toUpperCase().substring(0, 2),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 22,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -108,16 +108,16 @@ class ModalContainer extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          vente.image.length == 0
-              ? Container(
+          vente.image.isEmpty
+              ? SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: 150,
                   child: CircleAvatar(
                     backgroundColor: Colors.grey,
                     child: Text(
                       vente.nom.toUpperCase().substring(0, 2),
-                      style:
-                          TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 60, fontWeight: FontWeight.bold),
                     ),
                   ),
                 )

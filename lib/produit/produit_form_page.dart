@@ -5,7 +5,7 @@ import 'package:gestion_stock_flutter/service/produit_service.dart';
 // ignore: must_be_immutable
 class ProduitForm extends StatefulWidget {
   final Produit produit;
-  ProduitForm({super.key, required this.produit});
+  const ProduitForm({super.key, required this.produit});
 
   @override
   State<ProduitForm> createState() => _ProduitFormState();

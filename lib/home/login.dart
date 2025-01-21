@@ -44,7 +44,7 @@ class LoginPage extends StatelessWidget {
                   controller: emailEditingController,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
@@ -57,11 +57,11 @@ class LoginPage extends StatelessWidget {
                   controller: passwordEditingController,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Obx(() => controller.isSigningIn.value
-                  ? CircularProgressIndicator()
+                  ? const CircularProgressIndicator()
                   : ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black),
@@ -70,7 +70,7 @@ class LoginPage extends StatelessWidget {
                             passwordEditingController.text);
                       },
                       child: Container(
-                          child: Text(
+                          child: const Text(
                         "Connexion",
                         style: TextStyle(
                             fontSize: 20,

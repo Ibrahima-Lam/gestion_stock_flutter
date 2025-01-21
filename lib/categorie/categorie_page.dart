@@ -28,11 +28,11 @@ class _CategoriePageState extends State<CategoriePage> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
             child: ListView(
               children: categories
                   .map((e) => ListTile(
-                      leading: Container(
+                      leading: SizedBox(
                         width: 40,
                         height: 40,
                         child: CircleAvatar(
@@ -58,7 +58,7 @@ class _CategoriePageState extends State<CategoriePage> {
             ),
           ),
         )),
-        drawer: DrawerWidget(),
+        drawer: const DrawerWidget(),
       ),
     );
   }

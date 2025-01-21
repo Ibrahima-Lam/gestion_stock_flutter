@@ -8,7 +8,7 @@ import 'package:gestion_stock_flutter/vente/vente_form_page.dart';
 class SingleProduit extends StatefulWidget {
   final Produit produit;
 
-  SingleProduit({super.key, required this.produit});
+  const SingleProduit({super.key, required this.produit});
 
   @override
   State<SingleProduit> createState() => _SingleProduitState();
@@ -39,6 +39,7 @@ class _SingleProduitState extends State<SingleProduit> {
     getVentes();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -50,7 +51,7 @@ class _SingleProduitState extends State<SingleProduit> {
             Navigator.pop(context);
           },
         ),
-        title: Text('Les details du produit'),
+        title: const Text('Les details du produit'),
       ),
       body: SafeArea(
           child: SizedBox(
@@ -60,15 +61,15 @@ class _SingleProduitState extends State<SingleProduit> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              widget.produit.image.length == 0
-                  ? Container(
+              widget.produit.image.isEmpty
+                  ? SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 150,
                       child: CircleAvatar(
                         backgroundColor: Colors.grey,
                         child: Text(
                           widget.produit.nom.toUpperCase().substring(0, 2),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 60, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -105,7 +106,7 @@ class _SingleProduitState extends State<SingleProduit> {
                   ItemRow(title: 'Vente :', content: vente.toString()),
                   Center(
                     child: isLoadingVente
-                        ? CircularProgressIndicator(
+                        ? const CircularProgressIndicator(
                             color: Colors.black,
                           )
                         : null,

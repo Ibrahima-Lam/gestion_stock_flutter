@@ -26,14 +26,14 @@ class LoginService {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(email + ' est connecté')));
+          .showSnackBar(SnackBar(content: Text('$email est connecté')));
       print(userCredential.user!.uid);
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => ProduitPage()));
+          .push(MaterialPageRoute(builder: (context) => const ProduitPage()));
     } on FirebaseAuthException catch (e) {
       print(e);
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Echec connexion')));
+          .showSnackBar(const SnackBar(content: Text('Echec connexion')));
     }
   }
 }

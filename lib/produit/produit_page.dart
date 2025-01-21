@@ -11,7 +11,7 @@ import 'package:gestion_stock_flutter/widget/produit_listview.dart';
 
 // ignore: must_be_immutable
 class ProduitPage extends StatefulWidget {
-  ProduitPage({super.key});
+  const ProduitPage({super.key});
   @override
   State<ProduitPage> createState() => _ProduitPageState();
 }
@@ -49,10 +49,10 @@ class _ProduitPageState extends State<ProduitPage> {
         appBar: AppBar(
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
-          title: Text('Liste des Produit'),
+          title: const Text('Liste des Produit'),
           actions: [
             IconButton(
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
               onPressed: () async {
                 await showSearch(
                     context: context, delegate: Delegate(words: Produits));
@@ -61,7 +61,7 @@ class _ProduitPageState extends State<ProduitPage> {
           ],
           bottom: TabBar(
               isScrollable: true,
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -74,7 +74,7 @@ class _ProduitPageState extends State<ProduitPage> {
               ]),
         ),
         body: isLoading
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : TabBarView(children: [

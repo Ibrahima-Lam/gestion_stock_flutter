@@ -12,7 +12,7 @@ class ClientPage extends StatefulWidget {
 }
 
 class _ClientPageState extends State<ClientPage> {
-  ClientService _clientService = ClientService();
+  final ClientService _clientService = ClientService();
   List<Client> Clients = [];
   bool isLoading = false;
   final String appBarTitle = 'Listes des clients';
@@ -56,7 +56,7 @@ class _ClientPageState extends State<ClientPage> {
                   )
                 : ListView(
                     children: Clients.map((e) => ListTile(
-                        leading: Icon(Icons.person),
+                        leading: const Icon(Icons.person),
                         title: Text(e.nom),
                         subtitle: Text(e.adresse),
                         onTap: () {
@@ -67,7 +67,7 @@ class _ClientPageState extends State<ClientPage> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width,
                                         height: 150,
@@ -75,7 +75,7 @@ class _ClientPageState extends State<ClientPage> {
                                           backgroundColor: Colors.grey,
                                           child: Text(
                                             e.nom.toUpperCase().substring(0, 2),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 60,
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -102,7 +102,7 @@ class _ClientPageState extends State<ClientPage> {
                   ),
           ),
         )),
-        drawer: DrawerWidget(),
+        drawer: const DrawerWidget(),
       ),
     );
   }
