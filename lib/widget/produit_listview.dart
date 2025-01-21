@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gestion_stock_flutter/categorie/categorie.dart';
 import 'package:gestion_stock_flutter/produit/produit.dart';
@@ -6,14 +7,15 @@ import 'package:gestion_stock_flutter/produit/single_produit.dart';
 // ignore: must_be_immutable
 class ProduitListView extends StatelessWidget {
   final Categorie categorie;
-  List<Produit> Produits;
+  List<Produit> produits;
 
   bool isLoading = false;
-  ProduitListView({super.key, required this.categorie, required this.Produits});
+  ProduitListView({super.key, required this.categorie, required this.produits});
 
   List<Produit> filtreProduit() {
-    if (categorie.id == 'tous') return Produits;
-    return Produits.where((element) => categorie.id == element.categorie)
+    if (categorie.id == 'tous') return produits;
+    return produits
+        .where((element) => categorie.id == element.categorie)
         .toList();
   }
 
@@ -41,12 +43,23 @@ class ProduitListView extends StatelessWidget {
                               ),
                             ),
                           )
-                        : Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
+                        : CachedNetworkImage(
+                            imageUrl: elmt.image,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                const Icon(Icons.image),
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: NetworkImage(elmt.image))),
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.image),
+                            height: 40,
+                            width: 40,
                           ),
                     title: Text(elmt.nom),
                     subtitle: Text('${elmt.prix} um'),

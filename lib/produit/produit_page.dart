@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_stock_flutter/categorie/categorie.dart';
 import 'package:gestion_stock_flutter/categorie/categorie_data.dart';
-import 'package:gestion_stock_flutter/produit/produit.dart';
-import 'package:gestion_stock_flutter/service/produit_service.dart';
+import 'package:gestion_stock_flutter/controllers/produit_controller.dart';
 import 'package:gestion_stock_flutter/widget/delegate_widget.dart';
 import 'package:gestion_stock_flutter/widget/drawer_widget.dart';
 import 'package:gestion_stock_flutter/widget/produit_listview.dart';
+import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class ProduitPage extends StatefulWidget {
@@ -17,33 +17,18 @@ class ProduitPage extends StatefulWidget {
 }
 
 class _ProduitPageState extends State<ProduitPage> {
-  final ProduitService _service = ProduitService();
   List<Categorie> categories = CategorieData().categories;
-  List<Produit> Produits = [];
-  bool isLoading = false;
 
-  void setIsloadingProduit(bool val) {
-    setState(() {
-      isLoading = val;
-    });
-  }
-
-  Future<void> getData() async {
-    setIsloadingProduit(true);
-    Produits = await _service.getProduitsFromFirebase();
-    setIsloadingProduit(false);
-  }
-
+  final ProduitController _controller = Get.put(ProduitController());
   @override
   void initState() {
-    getData();
+    _controller.getProduitsFromFirebase();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: DefaultTabController(
+    return DefaultTabController(
       length: categories.length,
       child: Scaffold(
         appBar: AppBar(
@@ -55,11 +40,17 @@ class _ProduitPageState extends State<ProduitPage> {
               icon: const Icon(Icons.search),
               onPressed: () async {
                 await showSearch(
-                    context: context, delegate: Delegate(words: Produits));
+                    context: context,
+                    delegate: Delegate(words: _controller.produits));
               },
             )
           ],
           bottom: TabBar(
+              indicatorColor: Colors.white,
+              indicatorPadding:
+                  const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+              tabAlignment: TabAlignment.start,
               isScrollable: true,
               labelStyle: const TextStyle(
                 color: Colors.white,
@@ -73,17 +64,19 @@ class _ProduitPageState extends State<ProduitPage> {
                   )
               ]),
         ),
-        body: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : TabBarView(children: [
-                for (final cat in categories)
-                  ProduitListView(
-                    Produits: Produits,
-                    categorie: cat,
-                  )
-              ]),
+        body: Obx(
+          () => _controller.isLoading.value
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : TabBarView(children: [
+                  for (final cat in categories)
+                    ProduitListView(
+                      produits: _controller.produits,
+                      categorie: cat,
+                    )
+                ]),
+        ),
         drawer: const DrawerWidget(),
         /*  floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
@@ -95,7 +88,7 @@ class _ProduitPageState extends State<ProduitPage> {
                   MaterialPageRoute(builder: (context) => ProduitPage()));
             }), */
       ),
-    ));
+    );
   }
 }
 /* 

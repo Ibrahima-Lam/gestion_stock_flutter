@@ -122,7 +122,7 @@ class _VenteFormState extends State<VenteForm> {
                             foregroundColor: Colors.white,
                             elevation: 5),
                         onPressed: () async {
-                          final String idp = widget.produit.idProduit ?? '';
+                          final String idp = widget.produit.idProduit;
                           final Vente vente = Vente(
                               idVente:
                                   'V${DateTime.now().toString().replaceAll('-', '').replaceAll(' ', '').replaceAll(':', '').substring(0, 14)}',

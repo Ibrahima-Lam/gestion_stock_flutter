@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_stock_flutter/categorie/categorie_page.dart';
 import 'package:gestion_stock_flutter/client/client_page.dart';
-import 'package:gestion_stock_flutter/home/login.dart';
+import 'package:gestion_stock_flutter/controllers/login_controller.dart';
 import 'package:gestion_stock_flutter/produit/produit_page.dart';
 import 'package:gestion_stock_flutter/vente/vente_page.dart';
 
-class DrawerWidget extends StatelessWidget {
-  final String titre = 'Gestion des Stock';
+class DrawerWidget extends StatefulWidget {
   const DrawerWidget({super.key});
+
+  @override
+  State<DrawerWidget> createState() => _DrawerWidgetState();
+}
+
+class _DrawerWidgetState extends State<DrawerWidget> {
+  final String titre = 'Gestion des Stock';
+
+  final LoginController _loginController = LoginController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +69,7 @@ class DrawerWidget extends StatelessWidget {
           ),
           ListTile(
             title: const Text("Deconnexion"),
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => LoginPage())),
+            onTap: () => _loginController.logout(context),
           ),
         ],
       ),

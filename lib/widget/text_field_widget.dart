@@ -29,12 +29,23 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           suffixIcon: !widget.obscure
               ? null
               : IconButton(
-                  icon: const Icon(Icons.remove_red_eye),
+                  icon: !visible
+                      ? const Icon(
+                          Icons.visibility_off,
+                          color: Colors.grey,
+                        )
+                      : const Icon(
+                          Icons.visibility,
+                          color: Colors.blue,
+                        ),
                   onPressed: () {
                     _visible();
                   },
                 ),
-          border: InputBorder.none,
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(width: 0.5, color: Colors.grey),
+            borderRadius: BorderRadius.circular(10),
+          ),
           hintText: widget.hintText,
           contentPadding: const EdgeInsets.all(10)),
     );

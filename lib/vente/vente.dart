@@ -42,7 +42,7 @@ class VenteProduit extends Produit {
   final String date;
 
   VenteProduit(
-      {super.idProduit,
+      {required super.idProduit,
       required super.nom,
       required super.prix,
       required super.stock,

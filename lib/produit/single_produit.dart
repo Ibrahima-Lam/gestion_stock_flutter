@@ -1,9 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gestion_stock_flutter/controllers/vente_controller.dart';
 import 'package:gestion_stock_flutter/produit/produit.dart';
 import 'package:gestion_stock_flutter/produit/produit_form_page.dart';
-import 'package:gestion_stock_flutter/service/vente_service.dart';
-import 'package:gestion_stock_flutter/vente/vente.dart';
 import 'package:gestion_stock_flutter/vente/vente_form_page.dart';
+import 'package:get/get.dart';
 
 class SingleProduit extends StatefulWidget {
   final Produit produit;
@@ -16,6 +17,7 @@ class SingleProduit extends StatefulWidget {
 
 class _SingleProduitState extends State<SingleProduit> {
   final TextEditingController stockEditingController = TextEditingController();
+  final VenteController _venteController = Get.put(VenteController());
   int vente = 0;
   bool isLoadingVente = false;
 
@@ -25,18 +27,10 @@ class _SingleProduitState extends State<SingleProduit> {
     });
   }
 
-  Future<void> getVentes() async {
-    setIsloadingVente(true);
-    List<Vente> ventes = await VenteService()
-        .getVentesFromFirebaseWhere(idProduit: widget.produit.idProduit);
-    vente = ventes.length;
-    setIsloadingVente(false);
-  }
-
   @override
   void initState() {
     super.initState();
-    getVentes();
+    _venteController.getVentes();
   }
 
   @override
@@ -74,11 +68,22 @@ class _SingleProduitState extends State<SingleProduit> {
                         ),
                       ),
                     )
-                  : Container(
-                      height: 200,
-                      decoration: BoxDecoration(
+                  : CachedNetworkImage(
+                      imageUrl: widget.produit.image,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Icon(Icons.image),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.image),
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(widget.produit.image))),
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      height: 200,
+                      width: 200,
                     ),
               const SizedBox(
                 height: 20,
@@ -101,17 +106,23 @@ class _SingleProduitState extends State<SingleProduit> {
               const SizedBox(
                 height: 20,
               ),
-              Stack(
-                children: [
-                  ItemRow(title: 'Vente :', content: vente.toString()),
-                  Center(
-                    child: isLoadingVente
-                        ? const CircularProgressIndicator(
-                            color: Colors.black,
-                          )
-                        : null,
-                  )
-                ],
+              Obx(
+                () => Stack(
+                  children: [
+                    ItemRow(
+                        title: 'Vente :',
+                        content: _venteController
+                            .getVenteTotalProduct(widget.produit.idProduit)
+                            .toString()),
+                    Center(
+                      child: _venteController.isLoading.value
+                          ? const CircularProgressIndicator(
+                              color: Colors.black,
+                            )
+                          : null,
+                    )
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -122,7 +133,7 @@ class _SingleProduitState extends State<SingleProduit> {
                   ActionButton(
                     title: ' Stocker',
                     onPressed: () async {
-                      final bool a = await Navigator.push(
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => ProduitForm(
@@ -130,8 +141,6 @@ class _SingleProduitState extends State<SingleProduit> {
                           ),
                         ),
                       );
-                      print('_' * 60);
-                      print(a);
                     },
                   ),
                   ActionButton(
@@ -145,7 +154,7 @@ class _SingleProduitState extends State<SingleProduit> {
                           ),
                         ),
                       );
-                      getVentes();
+                      _venteController.getVentes();
                     },
                   )
                 ],

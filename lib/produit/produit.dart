@@ -1,5 +1,5 @@
 class Produit {
-  final String? idProduit;
+  final String idProduit;
   final String nom;
   final int prix;
   int stock;
@@ -8,7 +8,7 @@ class Produit {
   final String image;
 
   Produit({
-    this.idProduit,
+    required this.idProduit,
     required this.nom,
     required this.prix,
     required this.stock,
